@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Delete Records</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.deleteBtn').click(function(){
+                var id = $(this).data('id'); // Get the ID from the button's data-id attribute
+                if (confirm('Are you sure you want to delete this record?')) {
+                    $.ajax({
+                        url: 'delete.php',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function(response) {
+                            $('#result').html(response); // Display server response
+                            $('#record-' + id).remove(); // Remove the record from the list
+                        },
+                        error: function(xhr, status, error) {
+                            $('#result').html('An error occurred: ' + xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Delete Records with AJAX</h1>
+    <table id="recordsTable">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        <!-- Example records (you should fetch these from your database) -->
+        <tr id="record-1">
+            <td>1</td>
+            <td>John Doe</td>
+            <td>john.doe@example.com</td>
+            <td><button class="deleteBtn" data-id="1">Delete</button></td>
+        </tr>
+        <tr id="record-2">
+            <td>2</td>
+            <td>Jane Smith</td>
+            <td>jane.smith@example.com</td>
+            <td><button class="deleteBtn" data-id="2">Delete</button></td>
+        </tr>
+    </table>
+    <div id="result"></div>
+</body>
+</html>
